@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@reference "tailwindcss";
+
+:root {
+  --accent: #52f756;
+}
+
+@layer base {
+  html, body, #root {
+    @apply h-full;
+  }
+  body {
+    @apply bg-black text-white antialiased;
+    color: #ffffff;
+    font-family: "Science Gothic", system-ui, ui-sans-serif, sans-serif;
+    background-image:
+      radial-gradient(ellipse at top, rgba(82, 247, 86, 0.08), transparent 40%),
+      radial-gradient(ellipse at bottom, rgba(98, 125, 255, 0.08), transparent 40%),
+      radial-gradient(circle at 10% 10%, rgba(255,255,255,0.04), transparent 25%),
+      radial-gradient(circle at 90% 20%, rgba(255,255,255,0.04), transparent 25%),
+      radial-gradient(circle at 20% 80%, rgba(255,255,255,0.04), transparent 25%),
+      radial-gradient(circle at 80% 90%, rgba(255,255,255,0.04), transparent 25%);
+    background-color: #000;
+  }
+  ::selection {
+    background: var(--accent);
+    color: #000;
+  }
+}
+
+@layer components {
+  .card {
+    @apply border border-white/10 rounded-2xl bg-white/5;
+  }
+  .panel {
+    @apply rounded-xl bg-white/5 border border-white/10;
+  }
+}
