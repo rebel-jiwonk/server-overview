@@ -1,159 +1,267 @@
-export type VendorType = "supermicro" | "gigabyte";
-export type ChipType = "atom" | "atomMax" | "rebel";
+export type ChipType = "atom" | "atomMax" | "rebelQuad";
 
-export type ServerConfig = {
+export type VendorType = "supermicro" | "gigabyte" | "lenovo" | "dell";
+
+export interface ServerConfig {
+  id: string;
+  vendor: VendorType;
+  vendorLabel: string;
+  model: string;
+  modelUrl: string;
+  raidController: string;
+  memory: string;
+  cpu: string;
+  npu: string;
+  power: string;
+  distributor: string; // 총판사
+  images: string[]; // carousel images
+  note?: string; // 특이사항
+}
+
+export interface ChipInfo {
+  id: ChipType;
   label: string;
-  chassis: string;
-  formFactor: string;
-  nodeCount: string;
-  shortSpec: string;
-  image: string;
-  pills: {
-    npu: string;
-    cpu: string;
-    pcie: string;
-  };
-  specs: Record<string, string>;
-};
+  codeName: string;
+  description: string;
+  servers: ServerConfig[];
+}
 
-export const servers: Record<VendorType, Record<ChipType, ServerConfig>> = {
-  supermicro: {
-    atom: {
-      label: "Supermicro · ATOM",
-      chassis: "AS-4125GS-TNRT2",
-      formFactor: "4U GPU server · 8 accelerator slots",
-      nodeCount: "1 node · ATOM™ cards",
-      shortSpec: "Dual AMD EPYC 9355 · PCIe 5.0",
-      image: "/servers/as-4125gs-tnrt2.png",
-      pills: {
-        npu: "ATOM™ NPU · PCIe cards",
-        cpu: "Dual AMD EPYC 9355 (32C/64T, 3.55 GHz)",
-        pcie: "PCIe 5.0 x16 switch · dual-root",
+export const chips: Record<ChipType, ChipInfo> = {
+  atom: {
+    id: "atom",
+    label: "Atom",
+    codeName: "CA22",
+    description: "High-efficiency AI inference accelerator",
+    servers: [
+      {
+        id: "atom-supermicro",
+        vendor: "supermicro",
+        vendorLabel: "Supermicro",
+        model: "AS-4125GS-TNRT2",
+        modelUrl: "https://www.supermicro.com/en/products/system/gpu/4u/as-4125gs-tnrt2",
+        raidController: "SAS 3916",
+        memory: "1.5Ti",
+        cpu: "AMD EPYC 9254 24-Core Processor",
+        npu: "CA22 × 8ea",
+        power: "4kW (2+2)",
+        distributor: "슈퍼솔루션",
+        images: [
+          "/servers/as-4125gs-tnrt2.png",
+          "/servers/supermicro/AS -5126GS-TNRT2_main.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_front.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_angle.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_rear.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_top.webp",
+          "/servers/supermicro/H14DSG-O-CPU.webp",
+        ],
       },
-      specs: {
-        "Chassis": "Supermicro AS-4125GS-TNRT2 (4U GPU server)",
-        "CPU platform": "Dual AMD EPYC 9355 (32C/64T, 280 W)",
-        "Socket / chipset": "AMD SP5",
-        "Memory slots": "24 × DDR5 RDIMM",
-        "Max memory": "Up to 6 TB DDR5 RDIMM",
-        "Drive bays": '8 × 2.5" NVMe + 2 × 2.5" SATA (hot-swap)',
-        "Network": "2 × 10GbE (RJ45 or SFP, per config)",
-        "Power": "4 × 2000 W Titanium (2+2 redundant)",
+      {
+        id: "atom-gigabyte",
+        vendor: "gigabyte",
+        vendorLabel: "Gigabyte",
+        model: "G293-S43-AAP1",
+        modelUrl: "https://www.gigabyte.com/kr/Enterprise/GPU-Server/G293-S43-AAP1",
+        raidController: "Intel VROC",
+        memory: "1.5Ti",
+        cpu: "Intel Xeon Gold 6542Y",
+        npu: "CA22 × 16ea",
+        power: "3kW (1+1)",
+        distributor: "기가웨이브",
+        images: [
+          "/servers/gigabyte/600.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_a.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_angle.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_back.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_front.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_in.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_side.webp",
+        ],
       },
-    },
-
-    atomMax: {
-      label: "Supermicro · ATOM Max",
-      chassis: "AS-4125GS-TNRT2",
-      formFactor: "4U GPU server · 8 accelerator slots",
-      nodeCount: "1 node · ATOM™ Max cards",
-      shortSpec: "Dual AMD EPYC 9355 · PCIe 5.0",
-      image: "/servers/as-4125gs-tnrt2.png",
-      pills: {
-        npu: "ATOM™ Max NPU · high-density",
-        cpu: "Dual AMD EPYC 9355",
-        pcie: "PCIe 5.0 x16 per card",
+      {
+        id: "atom-lenovo",
+        vendor: "lenovo",
+        vendorLabel: "Lenovo",
+        model: "ThinkSystem SR675 V3",
+        modelUrl: "https://www.lenovo.com/kr/ko/p/servers-storage/servers/inferencing/thinksystem-sr675-v3/len21ts0007",
+        raidController: "NVMe Controller",
+        memory: "1.5Ti",
+        cpu: "AMD EPYC 9254 24-Core Processor",
+        npu: "CA22 × 8ea",
+        power: "3.6kW (2+2)",
+        distributor: "옥타곤",
+        images: [
+          "/servers/lenovo/4m0qcqhazk7hsfc4auon3n86pnit9u167406.webp",
+          "/servers/lenovo/7ip9ijc9gp05u9x8tc0vholzsfw6ws293227.webp",
+          "/servers/lenovo/9hjes7eu8yy83fwk1b0f3ecyc5btuh345351.webp",
+          "/servers/lenovo/dmjcsw4nfhhc1t9b7e02cg4qyiax4w957475 (1).avif",
+          "/servers/lenovo/dmjcsw4nfhhc1t9b7e02cg4qyiax4w957475.avif",
+          "/servers/lenovo/kjwrp6farqfkuh8myhpacrc2b9li83732505 (1).avif",
+          "/servers/lenovo/kjwrp6farqfkuh8myhpacrc2b9li83732505.avif",
+          "/servers/lenovo/x0v6d79rh5y9px06ecxhymoeq7651m127866 (1).webp",
+          "/servers/lenovo/x0v6d79rh5y9px06ecxhymoeq7651m127866.webp",
+        ],
       },
-      specs: {
-        "Chassis": "Supermicro AS-4125GS-TNRT2",
-        "CPU platform": "Dual AMD EPYC 9355",
-        "Socket / chipset": "AMD SP5",
-        "Memory slots": "24 × DDR5 RDIMM",
-        "Max memory": "Up to 6 TB DDR5",
-        "Accelerator slots": "Up to 8 × ATOM™ Max (PCIe 5.0)",
-        "Drive bays": '8 × 2.5" NVMe + 2 × 2.5" SATA',
-        "Network": "2 × 10GbE",
-        "Power": "4 × 2000 W Titanium (2+2)",
+      {
+        id: "atom-dell",
+        vendor: "dell",
+        vendorLabel: "Dell",
+        model: "PowerEdge R760xa",
+        modelUrl: "https://www.dell.com/ko-kr/shop/cty/pdp/spd/poweredge-r760xa/asper760xa",
+        raidController: "PERC H755 Front",
+        memory: "1.5Ti",
+        cpu: "Intel Xeon Gold 6442Y / 96core",
+        npu: "CA22 × 4ea",
+        power: "2.4kW (1+1)",
+        distributor: "옥타곤",
+        images: [
+          "/servers/dell/server-poweredge-760xa-black-gallery-2.avif",
+          "/servers/dell/server-poweredge-760xa-black-gallery-4.avif",
+          "/servers/dell/server-poweredge-760xa-black-gallery-5.avif",
+          "/servers/dell/server-poweredge-760xa-black-gallery-10.avif",
+          "/servers/dell/server-poweredge-760xa-black-gallery-12.avif",
+        ],
+        note: "2025년 12월에 단종",
       },
-    },
-
-    rebel: {
-      label: "Supermicro · REBEL",
-      chassis: "AS-4125GS-TNRT2",
-      formFactor: "4U GPU server · 8 accelerator slots",
-      nodeCount: "1 node · REBEL™ cards",
-      shortSpec: "Dual AMD EPYC 9355 · PCIe 5.0",
-      image: "/servers/as-4125gs-tnrt2.png",
-      pills: {
-        npu: "REBEL™ NPU · PCIe cards",
-        cpu: "Dual AMD EPYC 9355",
-        pcie: "PCIe 5.0 x16",
-      },
-      specs: {
-        "Chassis": "Supermicro AS-4125GS-TNRT2",
-        "CPU platform": "Dual AMD EPYC 9355",
-        "Accelerator slots": "Up to 8 × REBEL™",
-        "Memory slots": "24 × DDR5 RDIMM",
-        "Drive bays": '8 × NVMe + 2 × SATA',
-        "Network": "2 × 10GbE",
-        "Power": "4 × 2000 W Titanium (2+2)",
-      },
-    },
+    ],
   },
 
-  gigabyte: {
-    atom: {
-      label: "Gigabyte · ATOM",
-      chassis: "G494-ZB4-AAP2",
-      formFactor: "4U GPU server · 8 accelerator slots",
-      nodeCount: "1 node · ATOM™ cards",
-      shortSpec: "Dual socket platform · PCIe 5.0",
-      image: "/servers/g494-zb4-aap2.png",
-      pills: {
-        npu: "ATOM™ NPU · PCIe cards",
-        cpu: "Dual CPU platform (EPYC / Xeon, per config)",
-        pcie: "PCIe 5.0 x16",
+  atomMax: {
+    id: "atomMax",
+    label: "Atom-Max",
+    codeName: "CA25",
+    description: "Enhanced performance AI accelerator with higher throughput",
+    servers: [
+      {
+        id: "atommax-supermicro",
+        vendor: "supermicro",
+        vendorLabel: "Supermicro",
+        model: "AS-4125GS-TNRT2",
+        modelUrl: "https://www.supermicro.com/en/products/system/gpu/4u/as-4125gs-tnrt2",
+        raidController: "SAS 3916",
+        memory: "1.5Ti",
+        cpu: "AMD EPYC 9254/9355 24/32-Core Processor",
+        npu: "CA25 × 8ea",
+        power: "4kW (2+2)",
+        distributor: "슈퍼솔루션",
+        images: [
+          "/servers/as-4125gs-tnrt2.png",
+          "/servers/supermicro/AS -5126GS-TNRT2_main.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_front.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_angle.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_rear.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_top.webp",
+          "/servers/supermicro/H14DSG-O-CPU.webp",
+        ],
       },
-      specs: {
-        "Chassis": "Gigabyte G494-ZB4-AAP2 (4U GPU server)",
-        "CPU platform": "Dual-socket server (exact SKU TBD)",
-        "Accelerator slots": "Up to 8 × ATOM™ cards",
-        "Drive bays": "Front NVMe / SATA mix",
-        "Network": "High-speed Ethernet (10/25/100 GbE options)",
-        "Power": "Redundant PSUs (Gigabyte 4U platform)",
+      {
+        id: "atommax-gigabyte",
+        vendor: "gigabyte",
+        vendorLabel: "Gigabyte",
+        model: "G494-ZB4-AAP2",
+        modelUrl: "https://www.gigabyte.com/kr/Enterprise/GPU-Server/G494-ZB4-AAP2",
+        raidController: "GBT3908-MR-32PD",
+        memory: "2.2Ti",
+        cpu: "AMD EPYC 9355 32-Core Processor",
+        npu: "CA25 × 8ea",
+        power: "6kW (2+2)",
+        distributor: "기가웨이브",
+        images: [
+          "/servers/gigabyte/600.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_a.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_angle.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_back.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_front.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_in.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_side.webp",
+        ],
       },
-    },
+    ],
+  },
 
-    atomMax: {
-      label: "Gigabyte · ATOM Max",
-      chassis: "G494-ZB4-AAP2",
-      formFactor: "4U GPU server · 8 accelerator slots",
-      nodeCount: "1 node · ATOM™ Max cards",
-      shortSpec: "Dual socket · PCIe 5.0",
-      image: "/servers/g494-zb4-aap2.png",
-      pills: {
-        npu: "ATOM™ Max NPU · high-density",
-        cpu: "Dual CPU platform",
-        pcie: "PCIe 5.0 x16",
+  rebelQuad: {
+    id: "rebelQuad",
+    label: "Rebel-Quad",
+    codeName: "CR13",
+    description: "High-density quad-chip configuration for maximum compute density",
+    servers: [
+      {
+        id: "rebelquad-supermicro",
+        vendor: "supermicro",
+        vendorLabel: "Supermicro",
+        model: "AS-5126GS-TNRT2",
+        modelUrl: "https://www.supermicro.com/en/products/system/gpu/5u/as-5126gs-tnrt2",
+        raidController: "X",
+        memory: "1.5Ti",
+        cpu: "AMD EPYC 9355 32-Core Processor",
+        npu: "CR13 × 8ea",
+        power: "8.1kW (3+3)",
+        distributor: "슈퍼솔루션",
+        images: [
+          "/servers/supermicro/AS -5126GS-TNRT2_main.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_front.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_angle.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_rear.webp",
+          "/servers/supermicro/AS -5126GS-TNRT2_callout_top.webp",
+          "/servers/supermicro/H14DSG-O-CPU.webp",
+        ],
       },
-      specs: {
-        "Chassis": "Gigabyte G494-ZB4-AAP2",
-        "Accelerator slots": "Up to 8 × ATOM™ Max",
-        "Drive bays": "Front NVMe / SATA (per config)",
-        "Network": "High-speed Ethernet",
-        "Power": "Redundant PSUs",
+      {
+        id: "rebelquad-gigabyte",
+        vendor: "gigabyte",
+        vendorLabel: "Gigabyte",
+        model: "G494-ZB4-AAP2",
+        modelUrl: "https://www.gigabyte.com/kr/Enterprise/GPU-Server/G494-ZB4-AAP2",
+        raidController: "GBT3908-MR-32PD",
+        memory: "2.2Ti",
+        cpu: "AMD EPYC 9355 32-Core Processor",
+        npu: "CA25 × 8ea",
+        power: "6kW (2+2)",
+        distributor: "기가웨이브",
+        images: [
+          "/servers/gigabyte/600.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_a.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_angle.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_back.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_front.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_in.webp",
+          "/servers/gigabyte/G494-ZB4-AAP2_side.webp",
+        ],
+        note: "Extra Fan 장착하면 Rebel 보드 장착가능",
       },
-    },
-
-    rebel: {
-      label: "Gigabyte · REBEL",
-      chassis: "G494-ZB4-AAP2",
-      formFactor: "4U GPU server · 8 accelerator slots",
-      nodeCount: "1 node · REBEL™ cards",
-      shortSpec: "Dual socket · PCIe 5.0",
-      image: "/servers/g494-zb4-aap2.png",
-      pills: {
-        npu: "REBEL™ NPU · PCIe cards",
-        cpu: "Dual CPU platform",
-        pcie: "PCIe 5.0 x16",
+      {
+        id: "rebelquad-dell",
+        vendor: "dell",
+        vendorLabel: "Dell",
+        model: "PowerEdge XE7745",
+        modelUrl: "https://www.dell.com/ko-kr/shop/ipovw/poweredge-xe7745#techspecs_section",
+        raidController: "TBD",
+        memory: "TBD",
+        cpu: "TBD",
+        npu: "TBD",
+        power: "TBD",
+        distributor: "TBD",
+        images: [],
+        note: "검증필요",
       },
-      specs: {
-        "Chassis": "Gigabyte G494-ZB4-AAP2",
-        "Accelerator slots": "Up to 8 × REBEL™",
-        "Drive bays": "Front NVMe / SATA",
-        "Network": "High-speed Ethernet",
-        "Power": "Redundant PSUs",
-      },
-    },
+    ],
   },
 };
+
+export const CHIP_ORDER: ChipType[] = ["atom", "atomMax", "rebelQuad"];
+
+export function getChipByServerId(serverId: string): ChipInfo | undefined {
+  for (const chip of Object.values(chips)) {
+    if (chip.servers.some((s) => s.id === serverId)) {
+      return chip;
+    }
+  }
+  return undefined;
+}
+
+export function getServerById(serverId: string): ServerConfig | undefined {
+  for (const chip of Object.values(chips)) {
+    const server = chip.servers.find((s) => s.id === serverId);
+    if (server) return server;
+  }
+  return undefined;
+}
