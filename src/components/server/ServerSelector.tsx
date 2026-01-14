@@ -50,14 +50,50 @@ export function ServerSelector({
         </div>
       </div>
 
-      {/* Chip Description */}
-      <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/5 border border-white/10">
-        <div className="w-2 h-2 rounded-full bg-[var(--accent)]" />
-        <p className="text-sm text-white/70">
-          <span className="font-semibold text-white">{currentChip.label}</span>
-          <span className="mx-2 text-white/30">·</span>
-          {currentChip.description}
-        </p>
+      {/* Board Specifications */}
+      <div className="rounded-xl bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-6 h-6 rounded-md bg-[var(--accent)]/20 flex items-center justify-center">
+            <svg 
+              className="w-3.5 h-3.5 text-[var(--accent)]" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" 
+              />
+            </svg>
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-white">{currentChip.label}</span>
+            <span className="text-white/30 mx-2">·</span>
+            <span className="text-xs text-white/50">{currentChip.description}</span>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {currentChip.specs.map((spec, idx) => (
+            <div 
+              key={idx} 
+              className="bg-black/30 rounded-lg px-4 py-3 border border-white/5"
+            >
+              <p className="text-[10px] text-white/40 uppercase tracking-wider mb-1.5">
+                {spec.label}
+              </p>
+              <p className={`text-sm font-semibold ${
+                spec.label.includes("FP") || spec.label.includes("INT") || spec.label.includes("TOPS")
+                  ? "text-[var(--accent)]"
+                  : "text-white/90"
+              }`}>
+                {spec.value}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Server Selection */}

@@ -18,11 +18,17 @@ export interface ServerConfig {
   note?: string; // 특이사항
 }
 
+export interface ChipSpec {
+  label: string;
+  value: string;
+}
+
 export interface ChipInfo {
   id: ChipType;
   label: string;
   codeName: string;
   description: string;
+  specs: ChipSpec[];
   servers: ServerConfig[];
 }
 
@@ -32,6 +38,16 @@ export const chips: Record<ChipType, ChipInfo> = {
     label: "Atom",
     codeName: "CA22",
     description: "High-efficiency AI inference accelerator",
+    specs: [
+      { label: "FP16", value: "32 TFLOPS" },
+      { label: "INT8 / INT4", value: "128 TOPS / 256 TOPS" },
+      { label: "Input Power", value: "DC 12V (CPU 8-pin)" },
+      { label: "Max Power", value: "85W" },
+      { label: "Thermal", value: "Air Cooling (passive)" },
+      { label: "Memory", value: "GDDR6 16GB, 256GB/s" },
+      { label: "Host Interface", value: "PCIe Gen5 x16, 64GB/s" },
+      { label: "Form Factor", value: "FHFL Single Slot" },
+    ],
     servers: [
       {
         id: "atom-supermicro",
@@ -130,6 +146,16 @@ export const chips: Record<ChipType, ChipInfo> = {
     label: "Atom-Max",
     codeName: "CA25",
     description: "Enhanced performance AI accelerator with higher throughput",
+    specs: [
+      { label: "FP16", value: "128 TFLOPS" },
+      { label: "INT8 / INT4", value: "512 TOPS / 1024 TOPS" },
+      { label: "Input Power", value: "DC 12V (CPU 8-pin)" },
+      { label: "Max Power", value: "350W" },
+      { label: "Thermal", value: "Air Cooling (passive)" },
+      { label: "Memory", value: "GDDR6 64GB, 1024GB/s" },
+      { label: "Host Interface", value: "PCIe Gen5 x16, 64GB/s" },
+      { label: "Form Factor", value: "FHFL Dual Slot" },
+    ],
     servers: [
       {
         id: "atommax-supermicro",
@@ -182,7 +208,17 @@ export const chips: Record<ChipType, ChipInfo> = {
     id: "rebelQuad",
     label: "Rebel-Quad",
     codeName: "CR13",
-    description: "High-density quad-chip configuration for maximum compute density",
+    description: "4-homogeneous-chiplet SoC based on UCIe-Advanced",
+    specs: [
+      { label: "FP16", value: "1,024 TFLOPS" },
+      { label: "FP8", value: "2,048 TFLOPS" },
+      { label: "Host Interface", value: "2× PCIe Gen5 x16" },
+      { label: "Memory", value: "HBM3E 144GB, 4.8TB/s" },
+      { label: "Interconnect", value: "16Gbps, 1TB/s per channel" },
+      { label: "Max Power", value: "Up to 600W" },
+      { label: "Architecture", value: "UCIe-A Chiplet" },
+      { label: "Software", value: "PyTorch 2.x, vLLM, Triton" },
+    ],
     servers: [
       {
         id: "rebelquad-supermicro",
